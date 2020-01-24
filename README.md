@@ -4,3 +4,5 @@ Harjoitustyössä tehdään keskustelufoorumi. Käyttäjä voi lukea järjestelm
 
 Tietokantakaavio:
 ![alt text](https://github.com/glinoen/tsoha-Places/blob/master/documentation/Screenshot_2020-01-17%20tsoha-Places-tietokantakaavio%20-%20draw%20io.png)
+
+https://tsoha-places.herokuapp.com/
