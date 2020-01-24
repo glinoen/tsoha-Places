@@ -6,10 +6,15 @@
   </head>
 
   <body>
+    <ul>
+      <li><a href="{{ url_for('topics_index') }}">List topics</a></li>
+      <li><a href="{{ url_for('topics_form') }}">Add a topic</a></li>
+    </ul>
     {% block body %}
     <p>
         Tähän tuodaan sisältö muualta.
     </p>
     {% endblock %}
+    
   </body>
 </html>

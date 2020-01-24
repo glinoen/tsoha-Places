@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+  
+{% block body %}
+<b><p>Submit a new topic</p></b>
+<form method="POST" action="{{ url_for('topics_create') }}">
+  Title: <input type="text" name="name"/><br>
+  Message: <input type="text" name="message"/><br>
+  <input type="submit" value="Add a new topic"/>
+</form>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Replies</th>
+            <th>@</th>
+        </tr>
+        {% for topic in topics %}
+            {% set count = [] %}
+            {% for message in messages if message.topic_id == topic.id %}
+                {% set __ = count.append(1) %}
+            {% endfor %}
+            {% if count|length == 0 %}
+                    {% set __ = count.append(1) %}
+            {% endif %}        
+            <tr>
+                <td><a href="{{ url_for('topic_index', topic_id=topic.id) }}">{{ topic.name }}</a></td>
+                <td>{{ count|length - 1 }}</td>
+                <td>spoteil</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

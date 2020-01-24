@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    {% for message in messages %}
+    <table>
+        <tr>
+            <th>User: </th>
+            <th>MessageID:{{ message.id}} </th>
+        </tr>
+        
+        <tr>
+            <td>{{ message.content }}</td>
+
+        </tr>
+    </table>
+    {% endfor %}
+    <form method="POST" action="{{ url_for('messages_create', topic_id=topic.id) }}">
+        <input type="text" name="name"/>
+        <input type="submit" value="Add a reply"/>
+    </form>
+{% endblock %}
