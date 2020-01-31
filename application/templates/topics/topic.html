@@ -15,7 +15,7 @@
     </table>
     {% endfor %}
     <form method="POST" action="{{ url_for('messages_create', topic_id=topic.id) }}">
-        <input type="text" name="name"/>
+        {{form.reply}}
         <input type="submit" value="Add a reply"/>
     </form>
 {% endblock %}
