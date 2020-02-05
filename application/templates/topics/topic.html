@@ -4,7 +4,7 @@
     {% for message in messages %}
     <table>
         <tr>
-            <th>User: </th>
+            <th>User: {{ message.account_id }}</th>
             <th>MessageID:{{ message.id}} </th>
         </tr>
         
