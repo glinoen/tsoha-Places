@@ -5,7 +5,7 @@ Harjoitustyössä tehdään keskustelufoorumi. Käyttäjä voi lukea järjestelm
 Tietokantakaavio:
 ![alt text](https://github.com/glinoen/tsoha-Places/blob/master/documentation/Screenshot_2020-01-17%20tsoha-Places-tietokantakaavio%20-%20draw%20io.png)
 
-[Käyttötapaus 1](https://github.com/glinoen/tsoha-Places/blob/master/documentation/k%C3%A4ytt%C3%B6tapaus1.md)
+[Käyttötapausia](https://github.com/glinoen/tsoha-Places/blob/master/documentation/k%C3%A4ytt%C3%B6tapauksia.md )
 
 Sovellus Herokussa:
 https://tsoha-places.herokuapp.com/
