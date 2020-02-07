@@ -1,8 +1,7 @@
 from application import db
+from application.models import Base
 
-class Message(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+class Message(Base):
     topic_id = db.Column(db.Integer, db.ForeignKey('topic.id'), nullable=False)
     account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=False)
     #parent_message_id

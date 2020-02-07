@@ -4,15 +4,12 @@
     {% for message in messages %}
     <table>
         <tr>
-            <th>User: {{ message.account_id }}</th>
-            <th>MessageID:{{ message.id}} </th>
-        </tr>
-        
-        <tr>
-            <td>{{ message.content }}</td>
-
-        </tr>
+            <th bgcolor="lightblue">User: {{ message.account_id }}</th>
+            <th bgcolor="lightgreen">MessageID: {{ message.id}} </th>
+            <th bgcolor="lightgrey">{{ message.date_created }}</th>
+        </tr>        
     </table>
+    <p>{{ message.content }}</p>
     {% endfor %}
     <form method="POST" action="{{ url_for('messages_create', topic_id=topic.id) }}">
         {{form.reply}}
