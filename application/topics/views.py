@@ -25,7 +25,7 @@ def topic_index(topic_id):
 @login_required
 def topics_create():
     form = TopicForm(request.form)
-    t = Topic(form.title.data)
+    t = Topic(form.title.data, current_user.id)
     db.session().add(t)
     db.session().commit()
 
@@ -43,6 +43,18 @@ def messages_create(topic_id):
     m = Message(form.reply.data, topic_id, current_user.id)
     
     db.session().add(m)
+    db.session().commit()
+  
+    return redirect(url_for("topic_index", topic_id = topic_id))
+
+@app.route('/delete/<message_id>', methods=['POST'])
+@login_required
+def messages_delete(message_id):
+    message = Message.query.filter_by(id=message_id).first()
+    topic_id = message.topic_id
+    print("************************************")
+    print(message)
+    db.session().delete(message)
     db.session().commit()
   
     return redirect(url_for("topic_index", topic_id = topic_id))

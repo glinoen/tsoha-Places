@@ -9,6 +9,7 @@ class User(Base):
     password = db.Column(db.String(144), nullable=False)
 
     messages = db.relationship('Message', backref='User', lazy=True)
+    topics = db.relationship('Topic', backref='User', lazy=True)
 
     def __init__(self, username, password):
         self.username = username

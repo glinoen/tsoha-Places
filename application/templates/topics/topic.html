@@ -2,12 +2,29 @@
 
 {% block body %}
     {% for message in messages %}
-    <table>
-        <tr>
-            <th bgcolor="lightblue">User: {{ message.account_id }}</th>
-            <th bgcolor="lightgreen">MessageID: {{ message.id}} </th>
-            <th bgcolor="lightgrey">{{ message.date_created }}</th>
-        </tr>        
+    <table class="table table-sm">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">
+                    {% if topic.account_id == message.account_id %}
+                        User: OP 
+                    {% else %}
+                        User: {{ message.account_id }}
+                    {% endif %}
+                </th>
+                <th scope="col">MessageID: {{ message.id}} </th>
+                <th scope="col">{{ message.date_created }}</th>
+                {% if message.account_id == current_user.id %}
+                        <th scope="col">
+                            <form method="POST" id="poisto" action="{{ url_for('messages_delete', message_id=message.id, topic_id=topic.id) }}">
+                                <button type="submit" form="poisto"  class="btn btn-danger btn-sm">
+                                    Delet
+                                </button>
+                            </form>
+                        </th>
+                {% endif %} 
+            </tr>
+        </thead>
     </table>
     <p>{{ message.content }}</p>
     {% endfor %}
