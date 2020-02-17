@@ -25,27 +25,34 @@ def topic_index(topic_id):
 @login_required
 def topics_create():
     form = TopicForm(request.form)
-    t = Topic(form.title.data, current_user.id)
-    db.session().add(t)
-    db.session().commit()
+    if form.validate_on_submit():        
+        topic = Topic(form.title.data, current_user.id)
+        db.session().add(topic)
+        db.session().commit()
 
-    m = Message(form.message.data, t.id, current_user.id)
-    db.session().add(m)
-    db.session().commit()
-  
-    return redirect(url_for("topics_index"))
-
+        message = Message(form.message.data, topic.id, current_user.id)
+        db.session().add(message)
+        db.session().commit()
+    
+        return redirect(url_for("topics_index"))
+    
+    return render_template("topics/new.html", form = form, error="topic name must be between 1-100 characters and message between 1-1000 characters")
+    
 
 @app.route("/topics/<topic_id>/", methods=["POST"])
 @login_required
 def messages_create(topic_id):
     form = ReplyForm(request.form)
-    m = Message(form.reply.data, topic_id, current_user.id)
+    if form.validate_on_submit():
+        message = Message(form.reply.data, topic_id, current_user.id)
+        
+        db.session().add(message)
+        db.session().commit()
     
-    db.session().add(m)
-    db.session().commit()
-  
-    return redirect(url_for("topic_index", topic_id = topic_id))
+        return redirect(url_for("topic_index", topic_id = topic_id))
+    
+    return render_template("topics/topic.html", messages = db.session.query(Message).filter(Message.topic_id == topic_id), topic = Topic.query.get(topic_id), form = form, error="message must be between 1-1000 characters")
+
 
 @app.route('/delete/<message_id>', methods=['POST'])
 @login_required

@@ -5,8 +5,8 @@ class User(Base):
 
     __tablename__ = "account"
 
-    username = db.Column(db.String(144), nullable=False)
-    password = db.Column(db.String(144), nullable=False)
+    username = db.Column(db.String(20), nullable=False)
+    password = db.Column(db.String(20), nullable=False)
 
     messages = db.relationship('Message', backref='User', lazy=True)
     topics = db.relationship('Topic', backref='User', lazy=True)

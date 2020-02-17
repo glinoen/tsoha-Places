@@ -6,7 +6,7 @@ class Topic(Base):
     messages = db.relationship('Message', backref='topic', lazy=True)
     account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=False)
     
-    name = db.Column(db.String(144), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
     #place_id = db.Column(db.Integer, db.ForeignKey('place.id'), nullable=False)
 
     

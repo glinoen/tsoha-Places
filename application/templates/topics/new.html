@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
   
 {% block body %}
+<p style="color:red;">{{ error }}</p>
 <b><p>Submit a new topic</p></b>
 <form method="POST" action="{{ url_for('topics_create') }}">
   {{form.title.label}}: {{form.title}}<br>

@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user
 
 from application import app, db
@@ -11,8 +11,9 @@ def auth_login():
         return render_template("auth/loginform.html", form = LoginForm())
 
     form = LoginForm(request.form)
-    # mahdolliset validoinnit
-
+    if not form.validate_on_submit():
+        return render_template("auth/loginform.html", form = form,
+                               error = "username and password must be between 1-20 characters")
     user = User.query.filter_by(username=form.username.data, password=form.password.data).first()
     if not user:
         return render_template("auth/loginform.html", form = form,
@@ -33,10 +34,15 @@ def auth_register():
         return render_template("auth/registerform.html", form = LoginForm())
     
     form = LoginForm(request.form)
-
-    u = User(form.username.data, form.password.data)
+    if form.validate_on_submit():
+        u = User(form.username.data, form.password.data)
     
-    db.session().add(u)
-    db.session.commit()
+        db.session().add(u)
+        db.session.commit()
+        return redirect(url_for("auth_login"))
+    
+    return render_template("auth/registerform.html", form=form,  error = "username and password must be between 1-20 characters")
 
-    return redirect(url_for("auth_login"))
+    
+
+    
