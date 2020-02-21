@@ -7,6 +7,8 @@ Harjoitustyössä tehdään keskustelufoorumi. Käyttäjä voi lukea järjestelm
 
 [Käyttötapausia](https://github.com/glinoen/tsoha-Places/blob/master/documentation/k%C3%A4ytt%C3%B6tapauksia.md )
 
+[Setup guide](https://github.com/glinoen/tsoha-Places/blob/master/documentation/installation_manual.md)
+
 Sovellus Herokussa:
 https://tsoha-places.herokuapp.com/
 
