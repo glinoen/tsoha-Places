@@ -35,9 +35,9 @@ def auth_register():
     
     form = LoginForm(request.form)
     if form.validate_on_submit():
-        u = User(form.username.data, form.password.data)
+        user = User(form.username.data, form.password.data)
     
-        db.session().add(u)
+        db.session().add(user)
         db.session.commit()
         return redirect(url_for("auth_login"))
     

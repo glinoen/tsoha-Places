@@ -2,6 +2,7 @@ from application import app, db
 from flask import render_template, request, redirect, url_for
 from application.topics.models import Topic
 from application.messages.models import Message
+from application.places.models import Place
 from application.topics.forms import TopicForm, ReplyForm
 from flask_login import login_required, current_user
 
@@ -9,12 +10,16 @@ from flask_login import login_required, current_user
 @login_required
 def topics_index():
     messages = db.session.query(Message)
-    return render_template("topics/list.html", topics = Topic.query.all(), messages = messages)
+    return render_template("topics/list.html", topics = Topic.query.all(), messages = messages, places = Place.query.all())
 
 @app.route("/topics/new/")
 @login_required
 def topics_form():
-    return render_template("topics/new.html", form = TopicForm())
+    places = db.session.query(Place)
+    form=TopicForm()
+    form.place.choices = [("0", "---")] + [(i.id, i.name) for i in places]
+       
+    return render_template("topics/new.html", form = form)
 
 @app.route("/topics/<topic_id>/", methods=["GET"])
 @login_required
@@ -25,8 +30,14 @@ def topic_index(topic_id):
 @login_required
 def topics_create():
     form = TopicForm(request.form)
-    if form.validate_on_submit():        
-        topic = Topic(form.title.data, current_user.id)
+    if form.title.validate(form) and form.message.validate(form):
+        place = db.session.query(Place).get(form.place.data)
+        if form.place.data == 0:
+            place_id = 0
+        else:
+            place_id = place.id
+          
+        topic = Topic(form.title.data, current_user.id, place_id)
         db.session().add(topic)
         db.session().commit()
 
@@ -36,6 +47,10 @@ def topics_create():
     
         return redirect(url_for("topics_index"))
     
+    places = db.session.query(Place)
+    form=TopicForm()
+    form.place.choices = [("0", "---")] + [(i.id, i.name) for i in places]
+
     return render_template("topics/new.html", form = form, error="topic name must be between 1-100 characters and message between 1-1000 characters")
     
 

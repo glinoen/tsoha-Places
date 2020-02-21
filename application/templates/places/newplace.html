@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+  
+{% block body %}
+<p style="color:red;">{{ error }}</p>
+<b><p>Submit a new place</p></b>
+<form method="POST" action="{{ url_for('place_create') }}">
+  {{form.title.label}}: {{form.title}}<br>
+  {{form.parentplace.label}}: {{form.parentplace}}<br>
+  <input type="submit" value="Add a new place"/>
+</form>
+{% endblock %}

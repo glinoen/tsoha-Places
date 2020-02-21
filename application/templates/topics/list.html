@@ -19,7 +19,9 @@
             <tr>
                 <td><a href="{{ url_for('topic_index', topic_id=topic.id) }}">{{ topic.name }}</a></td>
                 <td>{{ count|length - 1 }}</td>
-                <td>spoteil</td>
+                {% for place in places if place.id == topic.place_id %}
+                    <td>{{place.name}}</td>
+                {% endfor %}
             </tr>
         {% endfor %}
     </table>

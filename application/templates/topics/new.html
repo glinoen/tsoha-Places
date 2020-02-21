@@ -6,6 +6,8 @@
 <form method="POST" action="{{ url_for('topics_create') }}">
   {{form.title.label}}: {{form.title}}<br>
   {{form.message.label}}: {{form.message}}<br>
+  {{form.place.label}}: {{form.place}} 
+  <a href="{{ url_for('place_form') }}">Add a new place to the list</a><br>
   <input type="submit" value="Add a new topic"/>
 </form>
 {% endblock %}

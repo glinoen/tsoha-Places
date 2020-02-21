@@ -16,6 +16,7 @@ else:
 db = SQLAlchemy(app)
 
 # Luetaan sovelluksen toiminnallisuudet
+from application import views
 from application import places
 
 from application.topics import models
@@ -23,6 +24,9 @@ from application.topics import views
 
 from application.auth import models
 from application.auth import views
+
+from application.places import models
+from application.places import views
 
 #kirjautuminen
 from application.auth.models import User

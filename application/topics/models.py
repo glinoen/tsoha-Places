@@ -7,10 +7,11 @@ class Topic(Base):
     account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=False)
     
     name = db.Column(db.String(100), nullable=False)
-    #place_id = db.Column(db.Integer, db.ForeignKey('place.id'), nullable=False)
+    place_id = db.Column(db.Integer, db.ForeignKey('place.id'), nullable=False)
 
     
-    def __init__(self, name, account_id):
+    def __init__(self, name, account_id, place_id):
             self.name = name
             self.account_id = account_id
+            self.place_id = place_id
 
