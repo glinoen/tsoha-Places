@@ -37,6 +37,7 @@ $ heroku create <app name>
 Add a Postgre-addon for Heroku
 ```
 $ heroku addons:create heroku-postgresql:hobby-dev
+```
 Deploy the current version of the application, run
 ```
 $ git push heroku master
