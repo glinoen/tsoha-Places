@@ -59,11 +59,17 @@ def topics_create():
         topic = Topic(form.title.data, current_user.id, place_id)
         db.session().add(topic)
         db.session().commit()
+        topic_timefix = Topic.query.get(topic.id)
+        topic_timefix.date_created = datetime.now().replace(microsecond=0, second = 0)
+        db.session().commit
 
         message = Message(form.message.data, topic.id, current_user.id)
         db.session().add(message)
         db.session().commit()
-    
+        message_timefix = Message.query.get(message.id)
+        message_timefix.date_created = datetime.now().replace(microsecond=0, second = 0)
+        db.session().commit()
+
         return redirect(url_for("topics_index"))
     
     places = db.session.query(Place)
@@ -81,6 +87,9 @@ def messages_create(topic_id):
         message = Message(form.reply.data, topic_id, current_user.id)
         
         db.session().add(message)
+        db.session().commit()
+        message_timefix = Message.query.get(message.id)
+        message_timefix.date_created = datetime.now().replace(microsecond=0, second = 0)
         db.session().commit()
     
         return redirect(url_for("topic_index", topic_id = topic_id))
