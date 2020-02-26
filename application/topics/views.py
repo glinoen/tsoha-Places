@@ -3,6 +3,7 @@ from flask import render_template, request, redirect, url_for
 from application.topics.models import Topic
 from application.messages.models import Message
 from application.places.models import Place
+from datetime import datetime
 from application.topics.forms import TopicForm, ReplyForm
 from flask_login import login_required, current_user
 
@@ -10,14 +11,25 @@ from flask_login import login_required, current_user
 @login_required
 def topics_index():
     messages = db.session.query(Message)
-    return render_template("topics/list.html", topics = Topic.query.all(), messages = messages, places = Place.query.all())
+    latest_message = Topic.latest()
+    return render_template("topics/list.html", topics = Topic.query.all(), messages = messages, places = Place.query.all(), latest_message = latest_message, datetime = datetime)
 
 @app.route("/topics/new/")
 @login_required
 def topics_form():
+    check = db.session.query(Place).first()
+    if check is None:
+        firstplace = Place("---", 0)
+        db.session().add(firstplace)
+        db.session.commit()
+    print("**")
+    print("**")
+    print(check)
+    print("**")
+    print("**")
     places = db.session.query(Place)
     form=TopicForm()
-    form.place.choices = [("0", "---")] + [(i.id, i.name) for i in places]
+    form.place.choices = [(i.id, i.name) for i in places]
        
     return render_template("topics/new.html", form = form)
 

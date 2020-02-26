@@ -2,11 +2,14 @@
 
 {% block body %}
     {% if topics is defined and topics|length > 0 %}
-    <table>
+    <h2>Topics</h2>
+    <table class="table">
         <tr>
             <th>Title</th>
             <th>Replies</th>
             <th>@</th>
+            <th>Posted</th>
+            <th>Latest post</th>
         </tr>
         {% for topic in topics %}
             {% set count = [] %}
@@ -17,10 +20,28 @@
                     {% set __ = count.append(1) %}
             {% endif %}        
             <tr>
-                <td><a href="{{ url_for('topic_index', topic_id=topic.id) }}">{{ topic.name }}</a></td>
-                <td>{{ count|length - 1 }}</td>
+                <td>
+                    <a href="{{ url_for('topic_index', topic_id=topic.id) }}">{{ topic.name }}</a>
+                </td>
+                <td>
+                    {{ count|length - 1 }}
+                </td>
                 {% for place in places if place.id == topic.place_id %}
-                    <td>{{place.name}}</td>
+                    {% if place.name != "---" %}
+                        <td>
+                            {{place.name}}
+                        </td>
+                    {% else %}
+                        <td> </td>
+                    {% endif %}
+                {% endfor %}
+                <td>
+                    {{ topic.date_created.strftime('%d.%m.%Y at %H.%M') }}
+                </td>
+                {% for x in latest_message if x.topic_id == topic.id %}
+                    <td>
+                        {{ datetime.strptime(x.date_created, '%Y-%m-%d %H:%M:%S').strftime('%d.%m.%Y at %H.%M')}}
+                    </td>
                 {% endfor %}
             </tr>
         {% endfor %}

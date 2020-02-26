@@ -4,10 +4,14 @@
 <p style="color:red;">{{ error }}</p>
 <b><p>Submit a new topic</p></b>
 <form method="POST" action="{{ url_for('topics_create') }}">
+  <div class="form-group">
   {{form.title.label}}: {{form.title}}<br>
   {{form.message.label}}: {{form.message}}<br>
   {{form.place.label}}: {{form.place}} 
   <a href="{{ url_for('place_form') }}">Add a new place to the list</a><br>
-  <input type="submit" value="Add a new topic"/>
+  
+  
+  <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
 </form>
 {% endblock %}

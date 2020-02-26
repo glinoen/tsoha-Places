@@ -1,5 +1,6 @@
 from application import db
 from application.models import Base
+from sqlalchemy.sql import text
 
 class Topic(Base):
     
@@ -15,3 +16,17 @@ class Topic(Base):
             self.account_id = account_id
             self.place_id = place_id
 
+
+   
+    @staticmethod
+    def latest():
+        stmt = text("SELECT Topic.id, Message.date_created FROM Message"
+                     " LEFT JOIN Topic ON Topic.id = Message.topic_id"
+                     " GROUP BY Topic.id")
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            response.append({"topic_id":row[0], "date_created":row[1]})
+
+        return response

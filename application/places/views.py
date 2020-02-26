@@ -11,7 +11,7 @@ from flask_login import login_required, current_user
 def place_form():
     places = db.session.query(Place)
     form=PlaceForm()
-    form.parentplace.choices = [("0", "---")] + [(i.id, i.name) for i in places]
+    form.parentplace.choices = [(i.id, i.name) for i in places]
 
     return render_template("places/newplace.html", form = form)
 
@@ -22,12 +22,7 @@ def place_create():
     if form.title.validate(form):
     
         parent = db.session.query(Place).get(form.parentplace.data)
-        if parent is None:
-            parent_id = 0
-        else:
-            parent_id = parent.id
-
-        place = Place(form.title.data, parent_id)
+        place = Place(form.title.data, parent.id)
         db.session().add(place)
         db.session().commit()
 
@@ -35,7 +30,7 @@ def place_create():
     
     places = db.session.query(Place)
     form=PlaceForm()
-    form.parentplace.choices = [("0", "---")] + [(i.id, i.name) for i in places]
+    form.parentplace.choices = [(i.id, i.name) for i in places]
 
     return render_template("places/newplace.html", form = form, error="place name must be between 1-20 characters")
 
