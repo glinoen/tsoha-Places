@@ -14,7 +14,7 @@
                     {% endif %}
                 </th>
                 <th scope="col">MessageID: {{ message.id}} </th>
-                <th scope="col">{{ message.date_created }}</th>
+                <th scope="col">{{ message.date_created.strftime('%d.%m.%Y at %H.%M') }}</th>
                 {% if message.account_id == current_user.id %}
                         <th scope="col">
                             <form method="POST" id="poisto" action="{{ url_for('messages_delete', message_id=message.id, topic_id=topic.id) }}">

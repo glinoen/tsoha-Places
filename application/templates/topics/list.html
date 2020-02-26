@@ -40,7 +40,11 @@
                 </td>
                 {% for x in latest_message if x.topic_id == topic.id %}
                     <td>
-                        {{ datetime.strptime(x.date_created|string, '%Y-%m-%d %H:%M:%S.%f').strftime('%d.%m.%Y at %H.%M')}}
+                        {% if x.date_created is string %}
+                            {{ datetime.strptime(x.date_created, '%Y-%m-%d %H:%M:%S.%f').strftime('%d.%m.%Y at %H.%M')}}
+                        {% else %}
+                        {{ x.date_created.strftime('%d.%m.%Y at %H.%M') }}
+                        {% endif %}
                     </td>
                 {% endfor %}
             </tr>
