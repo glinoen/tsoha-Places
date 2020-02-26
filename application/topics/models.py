@@ -20,10 +20,12 @@ class Topic(Base):
    
     @staticmethod
     def latest():
-        stmt = text("SELECT Topic.id, Message.date_created FROM Message"
+        stmt = text("SELECT Topic.id, MAX(Message.date_created) FROM Message"
                      " LEFT JOIN Topic ON Topic.id = Message.topic_id"
-                     " GROUP BY Topic.id")
+                     " GROUP BY Topic.id, Message.topic_id"
+                     " ORDER BY Message.date_created ")
         res = db.engine.execute(stmt)
+
 
         response = []
         for row in res:
