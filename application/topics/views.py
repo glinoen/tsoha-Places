@@ -26,7 +26,7 @@ def topics_index():
 def topics_form():
     check = db.session.query(Place).first()
     if check is None:
-        firstplace = Place("---", 0)
+        firstplace = Place(name = "---", parent_id = None)
         db.session().add(firstplace)
         db.session.commit()
     print("**")
