@@ -10,9 +10,16 @@ from flask_login import login_required, current_user
 @app.route("/topics/", methods=["GET"])
 @login_required
 def topics_index():
+    topics = Topic.query.all()
     messages = db.session.query(Message)
     latest_message = Topic.latest()
-    return render_template("topics/list.html", topics = Topic.query.all(), messages = messages, places = Place.query.all(), latest_message = latest_message, datetime = datetime)
+    filtered_messages = []
+    for topic in topics:
+        for x in latest_message:
+            if x['topic_id'] == topic.id:
+                filtered_messages.append(x)
+                break
+    return render_template("topics/list.html", topics = topics, messages = messages, places = Place.query.all(), latest_message = filtered_messages, datetime = datetime)
 
 @app.route("/topics/new/")
 @login_required
