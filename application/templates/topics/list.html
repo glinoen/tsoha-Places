@@ -12,19 +12,14 @@
             <th>Latest post</th>
         </tr>
         {% for topic in topics %}
-            {% set count = [] %}
-            {% for message in messages if message.topic_id == topic.id %}
-                {% set __ = count.append(1) %}
-            {% endfor %}
-            {% if count|length == 0 %}
-                    {% set __ = count.append(1) %}
-            {% endif %}        
             <tr>
                 <td>
                     <a href="{{ url_for('topic_index', topic_id=topic.id) }}">{{ topic.name }}</a>
                 </td>
                 <td>
-                    {{ count|length - 1 }}
+                    {% for reply in replies if reply['topic_id'] == topic.id %}
+                        {{ reply['replies'] - 1}}
+                    {% endfor %}
                 </td>
                 {% for place in places if place.id == topic.place_id %}
                     {% if place.name != "---" %}

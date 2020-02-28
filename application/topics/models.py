@@ -39,3 +39,17 @@ class Topic(Base):
             response.append({"topic_id":row[0], "date_created":row[1]})
 
         return response
+    
+    @staticmethod
+    def replycount():
+        stmt = text('SELECT Topic.id, COUNT(Message.topic_id) as count FROM Topic'
+                    ' INNER JOIN Message ON Topic.id = Message.topic_id'
+                    ' GROUP BY Topic.id'
+                    ' ORDER BY count DESC')
+        res = db.engine.execute(stmt)
+
+        table = []
+        for row in res:
+            table.append({"topic_id":row[0], "replies":row[1]})
+
+        return table    

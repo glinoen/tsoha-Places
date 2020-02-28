@@ -11,7 +11,6 @@ from flask_login import login_required, current_user
 @login_required
 def topics_index():
     topics = Topic.query.all()
-    messages = db.session.query(Message)
     latest_message = Topic.latest()
     filtered_messages = []
     for topic in topics:
@@ -19,7 +18,10 @@ def topics_index():
             if x['topic_id'] == topic.id:
                 filtered_messages.append(x)
                 break
-    return render_template("topics/list.html", topics = topics, messages = messages, places = Place.query.all(), latest_message = filtered_messages, datetime = datetime)
+    
+    replies = Topic.replycount()
+
+    return render_template("topics/list.html", topics = topics, places = Place.query.all(), latest_message = filtered_messages, datetime = datetime, replies = replies)
 
 @app.route("/topics/new/")
 @login_required
@@ -57,6 +59,9 @@ def topic_index(topic_id):
             idList.append({"realid":x[1], "idfortopic":idForTopic})
         
     print(idList)
+
+    
+
 
     return render_template("topics/topic.html", messages = db.session.query(Message).filter(Message.topic_id == topic_id), topic = Topic.query.get(topic_id), form = ReplyForm(), idList = idList)
 
