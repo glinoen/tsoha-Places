@@ -1,6 +1,7 @@
 from application import db
 from application.models import Base
 
+
 class User(Base):
 
     __tablename__ = "account"
@@ -9,7 +10,8 @@ class User(Base):
     password = db.Column(db.String(20), nullable=False)
 
     messages = db.relationship('Message', backref='User', lazy=True)
-    topics = db.relationship('Topic', backref='User', lazy=True)
+    
+
 
     def __init__(self, username, password):
         self.username = username

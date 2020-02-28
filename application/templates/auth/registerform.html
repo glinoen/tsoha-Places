@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<h2>Sign up</h2>
 <p style="color:red;">{{ error }}</p>
 <form method="POST" action="{{ url_for('auth_register') }}">
   <table>

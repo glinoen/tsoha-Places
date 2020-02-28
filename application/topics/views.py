@@ -1,6 +1,6 @@
 from application import app, db
 from flask import render_template, request, redirect, url_for
-from application.topics.models import Topic
+from application.topics.models import Topic, topicAccount
 from application.messages.models import Message
 from application.places.models import Place
 from datetime import datetime
@@ -43,7 +43,22 @@ def topics_form():
 @app.route("/topics/<topic_id>/", methods=["GET"])
 @login_required
 def topic_index(topic_id):
-    return render_template("topics/topic.html", messages = db.session.query(Message).filter(Message.topic_id == topic_id), topic = Topic.query.get(topic_id), form = ReplyForm())
+    idForTopic = 0
+    currentTopicUsers = db.session.query(topicAccount).all()
+    idList = []
+    print(currentTopicUsers)
+    for x in currentTopicUsers:
+        print(x[0])
+        print('*')
+        print(topic_id)
+        if str(x[0]) == topic_id:
+            print('wtf P')
+            idForTopic = idForTopic + 1
+            idList.append({"realid":x[1], "idfortopic":idForTopic})
+        
+    print(idList)
+
+    return render_template("topics/topic.html", messages = db.session.query(Message).filter(Message.topic_id == topic_id), topic = Topic.query.get(topic_id), form = ReplyForm(), idList = idList)
 
 @app.route("/topics/", methods=["POST"])
 @login_required
@@ -56,7 +71,7 @@ def topics_create():
         else:
             place_id = place.id
           
-        topic = Topic(form.title.data, current_user.id, place_id)
+        topic = Topic(form.title.data, place_id)
         db.session().add(topic)
         db.session().commit()
         topic_timefix = Topic.query.get(topic.id)
@@ -69,6 +84,10 @@ def topics_create():
         message_timefix = Message.query.get(message.id)
         message_timefix.date_created = datetime.now().replace(microsecond=0, second = 0)
         db.session().commit()
+
+        newTopicAccount = topicAccount.insert().values(topic_id=topic.id, account_id=current_user.id)
+        db.session().execute(newTopicAccount)
+        db.session.commit()
 
         return redirect(url_for("topics_index"))
     
@@ -91,6 +110,15 @@ def messages_create(topic_id):
         message_timefix = Message.query.get(message.id)
         message_timefix.date_created = datetime.now().replace(microsecond=0, second = 0)
         db.session().commit()
+
+        currentTopicUsers = Topic.query.get(topic_id).accounts.all()
+        for user in currentTopicUsers:
+            if user.id == current_user.id:
+                return redirect(url_for("topic_index", topic_id = topic_id))
+
+        newTopicAccount = topicAccount.insert().values(topic_id=topic_id, account_id=current_user.id)
+        db.session().execute(newTopicAccount)
+        db.session.commit()   
     
         return redirect(url_for("topic_index", topic_id = topic_id))
     
@@ -108,3 +136,15 @@ def messages_delete(message_id):
     db.session().commit()
   
     return redirect(url_for("topic_index", topic_id = topic_id))
+
+@app.route("/delete/topic/<topic_id>", methods=["POST"])
+@login_required
+def topic_delete(topic_id):
+    Message.query.filter_by(topic_id=topic_id).delete()
+    topic = Topic.query.filter_by(id=topic_id).first()
+    db.session.delete(topic)
+    #topicAccount.delete().where(topicAccount.c.topic_id == topic_id).execute()
+
+    db.session().commit()
+
+    return redirect(url_for("topics_index"))
