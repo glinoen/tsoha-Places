@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<p style="color:red;">{{ error }}</p>
+<b><p>Edit message</p></b>
+    <form method="POST" action="{{ url_for('message_edit_post', message_id=message.id) }}">
+       {{form.reply.label}}: {{form.reply}}<br>
+       <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+{% endblock %}

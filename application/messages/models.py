@@ -4,7 +4,6 @@ from application.models import Base
 class Message(Base):
     topic_id = db.Column(db.Integer, db.ForeignKey('topic.id'), nullable=False)
     account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=False)
-    #parent_message_id
     
     content = db.Column(db.String(1000), nullable=False)
 

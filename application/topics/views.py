@@ -4,7 +4,7 @@ from application.topics.models import Topic, topicAccount
 from application.messages.models import Message
 from application.places.models import Place
 from datetime import datetime
-from application.topics.forms import TopicForm, ReplyForm
+from application.topics.forms import TopicForm, ReplyForm, EditTopicForm
 from flask_login import login_required, current_user
 
 @app.route("/topics/", methods=["GET"])
@@ -31,11 +31,7 @@ def topics_form():
         firstplace = Place(name = "---", parent_id = None)
         db.session().add(firstplace)
         db.session.commit()
-    print("**")
-    print("**")
-    print(check)
-    print("**")
-    print("**")
+
     places = db.session.query(Place)
     form=TopicForm()
     form.place.choices = [(i.id, i.name) for i in places]
@@ -50,19 +46,13 @@ def topic_index(topic_id):
     idList = []
     print(currentTopicUsers)
     for x in currentTopicUsers:
-        print(x[0])
-        print('*')
-        print(topic_id)
         if str(x[0]) == topic_id:
-            print('wtf P')
             idForTopic = idForTopic + 1
             idList.append({"realid":x[1], "idfortopic":idForTopic})
         
     print(idList)
 
     
-
-
     return render_template("topics/topic.html", messages = db.session.query(Message).filter(Message.topic_id == topic_id), topic = Topic.query.get(topic_id), form = ReplyForm(), idList = idList)
 
 @app.route("/topics/", methods=["POST"])
@@ -135,8 +125,6 @@ def messages_create(topic_id):
 def messages_delete(message_id):
     message = Message.query.filter_by(id=message_id).first()
     topic_id = message.topic_id
-    print("************************************")
-    print(message)
     db.session().delete(message)
     db.session().commit()
   
@@ -148,8 +136,54 @@ def topic_delete(topic_id):
     Message.query.filter_by(topic_id=topic_id).delete()
     topic = Topic.query.filter_by(id=topic_id).first()
     db.session.delete(topic)
-    #topicAccount.delete().where(topicAccount.c.topic_id == topic_id).execute()
 
     db.session().commit()
 
     return redirect(url_for("topics_index"))
+
+@app.route("/topics/edit/<topic_id>", methods=["GET"])
+@login_required
+def topic_edit(topic_id):
+    topic = Topic.query.get(topic_id)
+    places = db.session.query(Place)
+    form = EditTopicForm()
+    form.title.data = topic.name
+    form.place.data = Place.query.get(topic.place_id).id
+    
+    form.place.choices = [(i.id, i.name) for i in places]
+       
+    return render_template("topics/edit.html", form = form, topic_id = topic_id)
+
+@app.route("/topics/edit/<topic_id>", methods=["POST"])
+@login_required
+def topic_edit_post(topic_id):
+    form = EditTopicForm(request.form)
+    if form.title.validate(form):
+        topic = Topic.query.get(topic_id)
+        topic.name = form.title.data
+        topic.place_id = form.place.data
+        db.session().commit()
+        return redirect(url_for("topic_index", topic_id = topic_id))
+       
+    return render_template("topics/edit.html", form = form, topic_id = topic_id, error="title must be between 1-100 characters")
+
+@app.route("/messages/edit/<message_id>", methods=["GET"])
+@login_required
+def message_edit(message_id):
+    message = Message.query.get(message_id)
+    form=ReplyForm()
+    form.reply.data = message.content
+       
+    return render_template("messages/editmessage.html", form = form, message = message)
+
+@app.route("/messages/edit/<message_id>", methods=["POST"])
+@login_required
+def message_edit_post(message_id):
+    form = ReplyForm(request.form)
+    if form.validate_on_submit():
+        message = Message.query.get(message_id)
+        message.content = form.reply.data
+        db.session().commit()
+        return redirect(url_for("topic_index", topic_id = message.topic_id))
+      
+    return render_template("messages/editmessage.html", form = form, message_id = message_id, error="message must be between 1-1000 characters")

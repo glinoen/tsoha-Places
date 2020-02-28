@@ -5,27 +5,36 @@
     <table class="table table-sm">
         <thead class="thead-dard">
             <tr>
-							<th scope="col" >
-									{{ topic.name }}
-							</th>
-							{% if messages[0].account_id == current_user.id %}
-								<th scope="col" style="width: 25%">
-										<form method="POST" id="topic-delete" action="{{ url_for('topic_delete',topic_id=topic.id) }}">
-												<button type="submit" form="topic-delete"  class="btn btn-danger btn-sm">
-														Delete topic
-												</button>
-										</form>
-								</th>
-                {% endif %}
-						</tr>
-				</thead>
+				<th scope="col" >
+						{{ topic.name }}
+				</th>
+				<th scope="col" style="width: 20%">
+					{% if messages[0].account_id == current_user.id %}
+						<form method="GET" id="topic-edit" action="{{ url_for('topic_edit',topic_id=topic.id) }}">
+								<button type="submit" form="topic-edit"  class="btn btn-warning btn-sm">
+										Edit topic
+								</button>
+						</form>
+					{% endif %}
+				</th>
+				<th scope="col" style="width: 20%">
+				{% if messages[0].account_id == current_user.id %}
+					<form method="POST" id="topic-delete" action="{{ url_for('topic_delete',topic_id=topic.id) }}">
+							<button type="submit" form="topic-delete"  class="btn btn-danger btn-sm">
+									Delete topic
+							</button>
+					</form>
+				{% endif %}
+				</th>
+			</tr>
+		</thead>
     </table>
 
 {% for message in messages %}
 	<table class="table table-sm">
 		<thead class="thead-light">
 			<tr>
-				<th scope="col" style="width: 25%">
+				<th scope="col" style="width: 20%">
 					{% for id in idList if id['realid'] == message.account_id  %}
 						{% if id['idfortopic'] == 1 %}
 								User: OP 
@@ -34,25 +43,37 @@
 						{% endif %}    
 					{% endfor %}
 				</th>
-				<th scope="col" style="width: 25%">MessageID: {{ message.id}} </th>
-				<th scope="col" style="width: 25%">{{ message.date_created.strftime('%d.%m.%Y at %H.%M') }}</th>
-					<th scope="col" style="width: 25%">
-						{% if message.account_id == current_user.id %}
-						<form method="POST" id="poisto" action="{{ url_for('messages_delete', message_id=message.id, topic_id=topic.id) }}">
-							<button type="submit" form="poisto"  class="btn btn-danger btn-sm">
-								Delete message
-							</button>
-						</form>
-						{% endif %} 
-					</th>
+				<th scope="col" style="width: 20%">MessageID: {{ message.id}} </th>
+				<th scope="col" style="width: 20%">{{ message.date_created.strftime('%d.%m.%Y at %H.%M') }}</th>
+        <th scope="col" style="width: 20%">
+          {% if message.account_id == current_user.id %}
+            <form method="GET" id="edit-message{{message.id}}" action="{{ url_for('message_edit', message_id=message.id) }}">
+              <button type="submit" form="edit-message{{message.id}}"  class="btn btn-warning btn-sm">
+                Edit msg
+              </button>
+            </form>
+          {% endif %} 
+        </th>
+        <th scope="col" style="width: 20%">
+          {% if message.account_id == current_user.id %}
+            <form method="POST" id="poisto{{message.id}}" action="{{ url_for('messages_delete', message_id=message.id, topic_id=topic.id) }}">
+              <button type="submit" form="poisto{{message.id}}"  class="btn btn-danger btn-sm">
+                Delete msg
+              </button>
+            </form>
+          {% endif %} 
+        </th>
 				
 			</tr>
 		</thead>
 	</table>
 	<p>{{ message.content }}</p>
-	{% endfor %}
-    <form method="POST" action="{{ url_for('messages_create', topic_id=topic.id) }}">
+  {% endfor %}
+  <hr>
+    <form method="POST" id="reply" action="{{ url_for('messages_create', topic_id=topic.id) }}">
         {{form.reply}}
-        <input type="submit" value="Add a reply"/>
+        <button type="submit" form="reply" class="btn btn-success" >
+          Add a reply
+        </button>
     </form>
 {% endblock %}

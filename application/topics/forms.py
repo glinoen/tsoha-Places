@@ -20,3 +20,13 @@ class ReplyForm(FlaskForm):
 
     class Meta:
         csrf = False
+
+class EditTopicForm(FlaskForm):
+    
+    place = SelectField(u'Place', coerce=int, validators = [DataRequired()])
+
+    title = StringField("Topic title", [DataRequired(),
+        Length(min=1, max=100)])
+
+    class Meta:
+        csrf = False
