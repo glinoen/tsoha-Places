@@ -14,11 +14,9 @@ Harjoitustyössä tehdään keskustelufoorumi. Käyttäjä voi lukea järjestelm
 
 [Käyttäjätarinoita ja niiden SQL-kyselyitä](https://github.com/glinoen/tsoha-Places/blob/master/documentation/K%C3%A4ytt%C3%A4j%C3%A4tarinoita%20ja%20niiden%20SQL-kyselyit%C3%A4.md)
 
-[Yhteenvetokyselyt] (https://github.com/glinoen/tsoha-Places/blob/master/documentation/yhteenvetokyselyt.md)
+[Yhteenvetokyselyt](https://github.com/glinoen/tsoha-Places/blob/master/documentation/yhteenvetokyselyt.md)
 
-[Tulevaisuuden käyttötapauksia] (https://github.com/glinoen/tsoha-Places/blob/master/documentation/Tulevaisuuden%20k%C3%A4ytt%C3%B6tapauksia.md)
-
-
+[Tulevaisuuden käyttötapauksia](https://github.com/glinoen/tsoha-Places/blob/master/documentation/Tulevaisuuden%20k%C3%A4ytt%C3%B6tapauksia.md)
 
 
 
