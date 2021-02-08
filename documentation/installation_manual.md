@@ -22,7 +22,7 @@ $ python3 run.py
 ```
 Enter the following address to your browser
 ```
-$ localhost:5000
+$ 0.0.0.0:5000
 ```
 ## Heroku
 A 'Procfile' is included in the repo to help config heroku
